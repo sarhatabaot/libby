@@ -60,45 +60,53 @@ public class TransitiveDependencyHelper {
      * @param libraryManager the library manager used to download dependencies
      * @param saveDirectory  the directory where all transitive dependencies would be saved
      */
-    public TransitiveDependencyHelper(@NotNull LibraryManager libraryManager, @NotNull Path saveDirectory) {
+    public TransitiveDependencyHelper(@NotNull LibraryManager libraryManager, @NotNull Path saveDirectory) throws IOException {
         requireNonNull(libraryManager, "libraryManager");
         this.libraryManager = libraryManager;
 
-        IsolatedClassLoader classLoader = new IsolatedClassLoader();
-        String collectorClassName = "com.alessiodp.libby.transitive.TransitiveDependencyCollector";
-        String collectorClassPath = '/' + collectorClassName.replace('.', '/') + ".class";
+        try (IsolatedClassLoader classLoader = new IsolatedClassLoader()) {
+            String collectorClassName = "com.alessiodp.libby.transitive.TransitiveDependencyCollector";
+            String collectorClassPath = '/' + collectorClassName.replace('.', '/') + ".class";
 
-        for (TransitiveLibraryResolutionDependency dependency : TransitiveLibraryResolutionDependency.values()) {
-            classLoader.addPath(libraryManager.downloadLibrary(dependency.toLibrary()));
-        }
+            for (TransitiveLibraryResolutionDependency dependency : TransitiveLibraryResolutionDependency.values()) {
+                classLoader.addPath(libraryManager.downloadLibrary(dependency.toLibrary()));
+            }
 
-        final Class<?> transitiveDependencyCollectorClass;
-        try {
-            transitiveDependencyCollectorClass = classLoader.defineClass(collectorClassName, requireNonNull(getClass().getResourceAsStream(collectorClassPath), "resourceCollectorClass"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            final Class<?> transitiveDependencyCollectorClass;
+            try {
+                transitiveDependencyCollectorClass = classLoader.defineClass(collectorClassName, requireNonNull(getClass().getResourceAsStream(collectorClassPath), "resourceCollectorClass"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
-        try {
-            Class<?> artifactClass = classLoader.loadClass(ARTIFACT_CLASS);
+            try {
+                Class<?> artifactClass = classLoader.loadClass(ARTIFACT_CLASS);
 
-            // com.alessiodp.libby.TransitiveDependencyCollector(Path)
-            Constructor<?> constructor = transitiveDependencyCollectorClass.getConstructor(Path.class);
-            constructor.setAccessible(true);
-            transitiveDependencyCollectorObject = constructor.newInstance(saveDirectory);
-            // com.alessiodp.libby.TransitiveDependencyCollector#findTransitiveDependencies(String, String, String, String, Stream<String>)
-            resolveTransitiveDependenciesMethod = transitiveDependencyCollectorClass.getMethod("findTransitiveDependencies", String.class, String.class, String.class, String.class, Stream.class);
-            resolveTransitiveDependenciesMethod.setAccessible(true);
-            // org.eclipse.aether.artifact.Artifact#getGroupId()
-            artifactGetGroupIdMethod = artifactClass.getMethod("getGroupId");
-            // org.eclipse.aether.artifact.Artifact#getArtifactId()
-            artifactGetArtifactIdMethod = artifactClass.getMethod("getArtifactId");
-            // org.eclipse.aether.artifact.Artifact#getVersion()
-            artifactGetVersionMethod = artifactClass.getMethod("getVersion");
-            // org.eclipse.aether.artifact.Artifact#getClassifier()
-            artifactGetClassifierMethod = artifactClass.getMethod("getClassifier");
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
+                // com.alessiodp.libby.TransitiveDependencyCollector(Path)
+                Constructor<?> constructor = transitiveDependencyCollectorClass.getConstructor(Path.class);
+                constructor.setAccessible(true);
+                transitiveDependencyCollectorObject = constructor.newInstance(saveDirectory);
+                // com.alessiodp.libby.TransitiveDependencyCollector#findTransitiveDependencies(String, String, String, String, Stream<String>)
+                resolveTransitiveDependenciesMethod = transitiveDependencyCollectorClass.getMethod(
+                        "findTransitiveDependencies",
+                        String.class,
+                        String.class,
+                        String.class,
+                        String.class,
+                        Stream.class
+                );
+                resolveTransitiveDependenciesMethod.setAccessible(true);
+                // org.eclipse.aether.artifact.Artifact#getGroupId()
+                artifactGetGroupIdMethod = artifactClass.getMethod("getGroupId");
+                // org.eclipse.aether.artifact.Artifact#getArtifactId()
+                artifactGetArtifactIdMethod = artifactClass.getMethod("getArtifactId");
+                // org.eclipse.aether.artifact.Artifact#getVersion()
+                artifactGetVersionMethod = artifactClass.getMethod("getVersion");
+                // org.eclipse.aether.artifact.Artifact#getClassifier()
+                artifactGetClassifierMethod = artifactClass.getMethod("getClassifier");
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

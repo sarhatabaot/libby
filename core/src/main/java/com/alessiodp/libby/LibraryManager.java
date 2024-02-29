@@ -11,6 +11,7 @@ import com.alessiodp.libby.relocation.Relocation;
 import com.alessiodp.libby.relocation.RelocationHelper;
 import com.alessiodp.libby.transitive.TransitiveDependencyHelper;
 import com.alessiodp.libby.logging.adapters.LogAdapter;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Document;
@@ -372,7 +373,8 @@ public abstract class LibraryManager {
         requireNonNull(inputStream, "inputStream");
         requireNonNull(library, "library");
 
-        String timestamp, buildNumber;
+        String timestamp;
+        String buildNumber;
         try {
             // This reads the maven-metadata.xml file and gets the snapshot info from the <snapshot> tag.
             // Example tag:

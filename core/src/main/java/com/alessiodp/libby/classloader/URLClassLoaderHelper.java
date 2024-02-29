@@ -38,9 +38,7 @@ public class URLClassLoaderHelper extends ClassLoaderHelper {
         try {
             Method addURLMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
             setMethodAccessible(libraryManager, addURLMethod, "URLClassLoader#addURL(URL)",
-                    methodHandle -> {
-                        addURLMethodHandle = methodHandle;
-                    },
+                    methodHandle -> addURLMethodHandle = methodHandle,
                     instrumentation -> {
                         addOpensWithAgent(instrumentation);
                         addURLMethod.setAccessible(true);

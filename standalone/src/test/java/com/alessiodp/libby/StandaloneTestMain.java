@@ -26,12 +26,12 @@ public class StandaloneTestMain {
         libraryManager.loadLibrary(TestUtils.APACHE_COMMONS_LANG3);
         Class.forName(TestUtils.STRING_UTILS_CLASS);
 
-        if (!capitalize("this is a phrase").equals("This is a phrase")) {
+        if (!capitalize().equals("This is a phrase")) {
             throw new Exception("StringUtils.capitalize(...) returned a wrong result.");
         }
     }
 
-    private static String capitalize(String input) {
-        return StringUtils.capitalize(input);
+    private static String capitalize() {
+        return StringUtils.capitalize("this is a phrase");
     }
 }

@@ -1,3 +1,6 @@
+plugins {
+    id("com.alessiodp.libby.java-conventions")
+}
 repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://hub.spigotmc.org/nexus/content/groups/public/")
@@ -7,5 +10,5 @@ repositories {
 dependencies {
     api(project(":libby-core"))
 
-    compileOnly("net.md-5:bungeecord-api:1.20-R0.2-SNAPSHOT")
+    compileOnly(libs.bungee.api)
 }

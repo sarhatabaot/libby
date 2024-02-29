@@ -5,15 +5,18 @@ val mainClassPath = "com.alessiodp.libby.StandaloneTestMain"
 plugins {
     id("net.kyori.blossom") version "2.0.1"
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.alessiodp.libby.java-conventions")
 }
 
 dependencies {
     api(project(":libby-core"))
-    testCompileOnly("org.apache.commons:commons-lang3:3.13.0")
-    testImplementation("commons-io:commons-io:2.14.0")
+    testCompileOnly(libs.commons.lang3)
+    testImplementation(libs.commons.io)
 }
 
-val shadowTestJar = tasks.create<ShadowJar>("shadowTestJar") {
+val shadowTestJar = tasks.register<ShadowJar>("shadowTestJar") {
+    description = "Create test jar."
+    group = "Test"
     archiveClassifier.set("tests")
     from(sourceSets.test.get().output, sourceSets.main.get().output)
     manifest {
@@ -23,7 +26,10 @@ val shadowTestJar = tasks.create<ShadowJar>("shadowTestJar") {
 }
 
 val downloadDirectory = layout.buildDirectory.asFile.get().absolutePath.replace("\\", "\\\\")
-val testJarFile = shadowTestJar.archiveFile.get().asFile.absolutePath.replace("\\", "\\\\")
+val testJarFile = shadowTestJar.get().archiveFile.get().asFile.absolutePath.replace("\\", "\\\\")
+repositories {
+    mavenCentral()
+}
 
 tasks.test {
     dependsOn(shadowTestJar)

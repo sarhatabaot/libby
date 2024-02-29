@@ -258,7 +258,7 @@ public class ConfigurationFetcher {
                 }
 
                 ArrayList<?> includes = getArray(relocation, "includes");
-                // Just check if every element is a non-null String
+                // Check if every element is a non-null String
                 if (includes != null) {
                     for (Object include : includes) {
                         if (!(include instanceof String)) {
@@ -268,7 +268,7 @@ public class ConfigurationFetcher {
                 }
 
                 ArrayList<?> excludes = getArray(relocation, "excludes");
-                // Just check if every element is a non-null String
+                // Check if every element is a non-null String
                 if (excludes != null) {
                     for (Object exclude : excludes) {
                         if (!(exclude instanceof String)) {

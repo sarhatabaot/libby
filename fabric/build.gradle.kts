@@ -1,10 +1,14 @@
+plugins {
+    id("com.alessiodp.libby.java-conventions")
+}
 repositories {
     maven("https://maven.fabricmc.net")
+    mavenCentral()
 }
 
 dependencies {
     api(project(":libby-core"))
 
-    compileOnly("net.fabricmc:fabric-loader:0.14.21")
-    compileOnly("org.slf4j:slf4j-api:2.0.5") // Not api of fabric-loader
+    compileOnly(libs.fabric.loader)
+    compileOnly(libs.slf4j.api) // Not api of fabric-loader
 }

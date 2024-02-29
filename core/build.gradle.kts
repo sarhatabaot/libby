@@ -1,10 +1,12 @@
 plugins {
     id("net.kyori.blossom") version "2.0.1"
+    id("com.alessiodp.libby.java-conventions")
 }
 
 dependencies {
-    compileOnly("org.apache.maven.resolver:maven-resolver-supplier:1.9.15")
-    compileOnly("org.apache.maven:maven-resolver-provider:3.9.4")
+    compileOnly(libs.annotations)
+    compileOnly(libs.maven.resolver.provider)
+    compileOnly(libs.maven.resolver.supplier)
 }
 
 sourceSets {

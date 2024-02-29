@@ -57,14 +57,15 @@ public class StandaloneTest {
     @Test
     public void standaloneWithURLClassLoader() throws Exception {
         URL testJarURL = Paths.get(LibbyTestProperties.TEST_JAR).toUri().toURL();
-        URLClassLoader loader = new URLClassLoader(new URL[]{testJarURL}, ClassLoader.getSystemClassLoader().getParent());
+        try (URLClassLoader loader = new URLClassLoader(new URL[]{testJarURL}, ClassLoader.getSystemClassLoader().getParent())) {
 
-        Class<?> standaloneTestMainClass = loader.loadClass(StandaloneTestMain.class.getName());
-        assertNotSame(StandaloneTestMain.class, standaloneTestMainClass);
-        standaloneTestMainClass.getMethod("main", String[].class).invoke(null, (Object) new String[0]);
+            Class<?> standaloneTestMainClass = loader.loadClass(StandaloneTestMain.class.getName());
+            assertNotSame(StandaloneTestMain.class, standaloneTestMainClass);
+            standaloneTestMainClass.getMethod("main", String[].class).invoke(null, (Object) new String[0]);
 
-        assertThrows(ClassNotFoundException.class, () -> Class.forName(TestUtils.STRING_UTILS_CLASS));
-        assertNotNull(loader.loadClass(TestUtils.STRING_UTILS_CLASS));
+            assertThrows(ClassNotFoundException.class, () -> Class.forName(TestUtils.STRING_UTILS_CLASS));
+            assertNotNull(loader.loadClass(TestUtils.STRING_UTILS_CLASS));
+        }
     }
 
     private void failFormatted(Process testProcess, int exitCode) throws IOException {

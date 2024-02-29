@@ -1,3 +1,7 @@
+plugins {
+    id("com.alessiodp.libby.java-conventions")
+}
+
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
 }
@@ -5,7 +9,7 @@ repositories {
 dependencies {
     api(project(":libby-core"))
 
-    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
+    compileOnly(libs.paper.api)
 }
 
 java {

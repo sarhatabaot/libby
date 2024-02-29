@@ -133,7 +133,7 @@ public abstract class ClassLoaderHelper {
 
     /**
      * Sets the method accessible using reflections, the Unsafe class or a java agent loaded at runtime.
-     * <p>The provided consumers are mutually exclusive, i.e. only 1 of the provided consumers will run (if run).
+     * <p>The provided consumers are mutually exclusive, i.e. only one of the provided consumers will run (if run).
      *
      * @param libraryManager the {@link LibraryManager}
      * @param method the method to set accessible
@@ -296,8 +296,7 @@ public abstract class ClassLoaderHelper {
         // since java agents should have such permission.
 
         // Download ByteBuddy's agent and load it through an IsolatedClassLoader
-        IsolatedClassLoader isolatedClassLoader = new IsolatedClassLoader();
-        try {
+        try (IsolatedClassLoader isolatedClassLoader = new IsolatedClassLoader()) {
             isolatedClassLoader.addPath(libraryManager.downloadLibrary(
                     Library.builder()
                             .groupId("net{}bytebuddy")
@@ -319,10 +318,6 @@ public abstract class ClassLoaderHelper {
             Instrumentation instrumentation = (Instrumentation) byteBuddyAgent.getMethod("install").invoke(null);
             cachedInstrumentation = instrumentation;
             return instrumentation;
-        } finally {
-            try {
-                isolatedClassLoader.close();
-            } catch (Exception ignored) {}
         }
     }
 

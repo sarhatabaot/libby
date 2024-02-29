@@ -7,6 +7,7 @@ import com.alessiodp.libby.classloader.IsolatedClassLoader;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
@@ -55,58 +56,59 @@ public class RelocationHelper {
      *
      * @param libraryManager the library manager used to download dependencies
      */
-    public RelocationHelper(@NotNull LibraryManager libraryManager) {
+    public RelocationHelper(@NotNull LibraryManager libraryManager) throws IOException {
         requireNonNull(libraryManager, "libraryManager");
 
-        IsolatedClassLoader classLoader = new IsolatedClassLoader();
+        try (IsolatedClassLoader classLoader = new IsolatedClassLoader()) {
 
-        // ObjectWeb ASM Commons
-        classLoader.addPath(libraryManager.downloadLibrary(
-            Library.builder()
-                   .groupId("org{}ow2{}asm")
-                   .artifactId("asm-commons")
-                   .version("9.2")
-                   .checksum("vkzlMTiiOLtSLNeBz5Hzulzi9sqT7GLUahYqEnIl4KY=")
-                   .repository(Repositories.MAVEN_CENTRAL)
-                   .build()
-        ));
+            // ObjectWeb ASM Commons
+            classLoader.addPath(libraryManager.downloadLibrary(
+                    Library.builder()
+                            .groupId("org{}ow2{}asm")
+                            .artifactId("asm-commons")
+                            .version("9.2")
+                            .checksum("vkzlMTiiOLtSLNeBz5Hzulzi9sqT7GLUahYqEnIl4KY=")
+                            .repository(Repositories.MAVEN_CENTRAL)
+                            .build()
+            ));
 
-        // ObjectWeb ASM
-        classLoader.addPath(libraryManager.downloadLibrary(
-            Library.builder()
-                   .groupId("org{}ow2{}asm")
-                   .artifactId("asm")
-                   .version("9.2")
-                   .checksum("udT+TXGTjfOIOfDspCqqpkz4sxPWeNoDbwyzyhmbR/U=")
-                   .repository(Repositories.MAVEN_CENTRAL)
-                   .build()
-        ));
+            // ObjectWeb ASM
+            classLoader.addPath(libraryManager.downloadLibrary(
+                    Library.builder()
+                            .groupId("org{}ow2{}asm")
+                            .artifactId("asm")
+                            .version("9.2")
+                            .checksum("udT+TXGTjfOIOfDspCqqpkz4sxPWeNoDbwyzyhmbR/U=")
+                            .repository(Repositories.MAVEN_CENTRAL)
+                            .build()
+            ));
 
-        // Luck's Jar Relocator
-        classLoader.addPath(libraryManager.downloadLibrary(
-            Library.builder()
-                   .groupId("me{}lucko")
-                   .artifactId("jar-relocator")
-                   .version("1.7")
-                   .checksum("b30RhOF6kHiHl+O5suNLh/+eAr1iOFEFLXhwkHHDu4I=")
-                   .repository(Repositories.MAVEN_CENTRAL)
-                   .build()
-        ));
+            // Luck's Jar Relocator
+            classLoader.addPath(libraryManager.downloadLibrary(
+                    Library.builder()
+                            .groupId("me{}lucko")
+                            .artifactId("jar-relocator")
+                            .version("1.7")
+                            .checksum("b30RhOF6kHiHl+O5suNLh/+eAr1iOFEFLXhwkHHDu4I=")
+                            .repository(Repositories.MAVEN_CENTRAL)
+                            .build()
+            ));
 
-        try {
-            Class<?> jarRelocatorClass = classLoader.loadClass(JAR_RELOCATOR_CLASS);
-            Class<?> relocationClass = classLoader.loadClass(RELOCATION_CLASS);
+            try {
+                Class<?> jarRelocatorClass = classLoader.loadClass(JAR_RELOCATOR_CLASS);
+                Class<?> relocationClass = classLoader.loadClass(RELOCATION_CLASS);
 
-            // me.lucko.jarrelocator.JarRelocator(File, File, Collection)
-            jarRelocatorConstructor = jarRelocatorClass.getConstructor(File.class, File.class, Collection.class);
+                // me.lucko.jarrelocator.JarRelocator(File, File, Collection)
+                jarRelocatorConstructor = jarRelocatorClass.getConstructor(File.class, File.class, Collection.class);
 
-            // me.lucko.jarrelocator.JarRelocator#run()
-            jarRelocatorRunMethod = jarRelocatorClass.getMethod("run");
+                // me.lucko.jarrelocator.JarRelocator#run()
+                jarRelocatorRunMethod = jarRelocatorClass.getMethod("run");
 
-            // me.lucko.jarrelocator.Relocation(String, String, Collection, Collection)
-            relocationConstructor = relocationClass.getConstructor(String.class, String.class, Collection.class, Collection.class);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
+                // me.lucko.jarrelocator.Relocation(String, String, Collection, Collection)
+                relocationConstructor = relocationClass.getConstructor(String.class, String.class, Collection.class, Collection.class);
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

@@ -1,3 +1,6 @@
+plugins {
+    id("com.alessiodp.libby.java-conventions")
+}
 repositories {
     maven("https://repo.opencollab.dev/maven-releases")
     maven("https://repo.opencollab.dev/maven-snapshots")
@@ -6,5 +9,5 @@ repositories {
 dependencies {
     api(project(":libby-core"))
 
-    compileOnly("cn.nukkit:nukkit:1.0-SNAPSHOT")
+    compileOnly(libs.nukkit.api)
 }

@@ -36,12 +36,8 @@ public class SystemClassLoaderHelper extends ClassLoaderHelper {
         try {
             Method appendMethod = classLoader.getClass().getDeclaredMethod("appendToClassPathForInstrumentation", String.class);
             setMethodAccessible(libraryManager, appendMethod, classLoader.getClass().getName() + "#appendToClassPathForInstrumentation(String)",
-                    methodHandle -> {
-                        appendMethodHandle = methodHandle;
-                    },
-                    instrumentation -> {
-                        appendInstrumentation = instrumentation;
-                    }
+                    methodHandle -> appendMethodHandle = methodHandle,
+                    instrumentation -> appendInstrumentation = instrumentation
             );
         } catch (Exception e) {
             throw new RuntimeException("Couldn't initialize SystemClassLoaderHelper", e);

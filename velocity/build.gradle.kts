@@ -1,3 +1,6 @@
+plugins {
+    id("com.alessiodp.libby.java-conventions")
+}
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
 }
@@ -5,5 +8,5 @@ repositories {
 dependencies {
     api(project(":libby-core"))
 
-    compileOnly("com.velocitypowered:velocity-api:3.1.1") // Higher version requires Java 17
+    compileOnly(libs.velocity.api) // Higher version requires Java 17
 }

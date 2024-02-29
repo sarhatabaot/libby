@@ -1,3 +1,6 @@
+plugins {
+    id("com.alessiodp.libby.java-conventions")
+}
 repositories {
     maven("https://repo.spongepowered.org/maven/")
 }
@@ -5,5 +8,6 @@ repositories {
 dependencies {
     api(project(":libby-core"))
 
-    compileOnly("org.spongepowered:spongeapi:8.1.0") // Higher version requires Java 17
+    compileOnly(libs.annotations)
+    compileOnly(libs.sponge.api) // Higher version requires Java 17
 }

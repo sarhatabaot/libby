@@ -40,7 +40,7 @@ public class ConfigurationFetcherTest {
     }
 
     @Test
-    public void testFromFile() throws Exception {
+    void testFromFile() throws Exception {
         InputStream fileInputStream = getClass().getClassLoader().getResourceAsStream("libby.json");
         assertNotNull(fileInputStream);
         Configuration config = configurationFetcher.readJsonFile(fileInputStream);
@@ -102,7 +102,7 @@ public class ConfigurationFetcherTest {
     }
 
     @Test
-    public void testFails() {
+    void testFails() {
         Exception ex;
 
         // Version
