@@ -42,7 +42,7 @@ public class StandaloneTest {
     }
 
     @Test
-    public void standaloneWithSystemClassLoader() throws Exception {
+    void standaloneWithSystemClassLoader() throws Exception {
         Process testProcess = new ProcessBuilder(JAVA_EXECUTABLE, "-jar", LibbyTestProperties.TEST_JAR)
                 .start();
 
@@ -55,7 +55,7 @@ public class StandaloneTest {
     }
 
     @Test
-    public void standaloneWithURLClassLoader() throws Exception {
+    void standaloneWithURLClassLoader() throws Exception {
         URL testJarURL = Paths.get(LibbyTestProperties.TEST_JAR).toUri().toURL();
         try (URLClassLoader loader = new URLClassLoader(new URL[]{testJarURL}, ClassLoader.getSystemClassLoader().getParent())) {
 

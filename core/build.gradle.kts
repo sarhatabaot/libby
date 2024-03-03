@@ -1,5 +1,5 @@
 plugins {
-    id("net.kyori.blossom") version "2.0.1"
+    id("net.kyori.blossom") version "2.1.0"
     id("com.alessiodp.libby.java-conventions")
 }
 

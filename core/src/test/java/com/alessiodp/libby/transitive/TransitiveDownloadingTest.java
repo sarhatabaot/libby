@@ -9,15 +9,15 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-public class TransitiveDownloadingTest {
+ class TransitiveDownloadingTest {
 
     private static final Library MAVEN_RESOLVER_SUPPLIER = Library.builder()
             .groupId("org{}apache{}maven{}resolver")
             .artifactId("maven-resolver-supplier")
-            .version("1.9.15")
+            .version("1.9.18")
             .resolveTransitiveDependencies(true)
             .build();
     private static final Library EXCLUDED_LIBRARY = TransitiveLibraryResolutionDependency.MAVEN_RESOLVER_API.toLibrary();
@@ -43,14 +43,14 @@ public class TransitiveDownloadingTest {
     }
 
     @Test
-    public void transitiveLoad() {
+    void transitiveLoad() {
         libraryManager.loadLibrary(MAVEN_RESOLVER_SUPPLIER);
 
         checkDownloadedDependencies();
     }
 
     @Test
-    public void transitiveWithExcludedLoad() {
+    void transitiveWithExcludedLoad() {
         libraryManager.loadLibrary(MAVEN_RESOLVER_SUPPLIER_WITH_EXCLUDED);
 
         checkDownloadedDependencies(TransitiveLibraryResolutionDependency.MAVEN_RESOLVER_API);
@@ -70,7 +70,7 @@ public class TransitiveDownloadingTest {
         excluded.addAll(Arrays.asList(excludedDependencies));
 
         List<String> loaded = libraryManager.getLoaded();
-        // Assert that the correct amount of libraries has been loaded
+        // Assert that the correct number of libraries has been loaded
         assertEquals(TransitiveLibraryResolutionDependency.values().length - excluded.size(), loaded.size());
 
         Arrays.stream(TransitiveLibraryResolutionDependency.values())

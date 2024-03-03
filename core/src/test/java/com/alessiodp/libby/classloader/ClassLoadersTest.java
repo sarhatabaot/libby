@@ -11,8 +11,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-public class ClassLoadersTest {
+ class ClassLoadersTest {
 
     @BeforeEach
     void setUp() {
@@ -23,14 +22,14 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void testURLClassLoaderHelper() throws IOException {
+    void testURLClassLoaderHelper() throws IOException {
         LibraryManagerMock libraryManager = new LibraryManagerMock();
 
         new URLClassLoaderHelper(new URLClassLoader(new URL[0]), libraryManager);
     }
 
     @Test
-    public void testURLClassLoaderHelperNoUnsafe() throws IOException {
+    void testURLClassLoaderHelperNoUnsafe() throws IOException {
         LibraryManagerMock libraryManager = new LibraryManagerMock();
 
         setProperty(ClassLoaderHelper.SYSTEM_PROPERTY_DISABLE_UNSAFE);
@@ -38,7 +37,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void testURLClassLoaderHelperNoJavaAgent() throws IOException {
+    void testURLClassLoaderHelperNoJavaAgent() throws IOException {
         LibraryManagerMock libraryManager = new LibraryManagerMock();
 
         setProperty(ClassLoaderHelper.SYSTEM_PROPERTY_DISABLE_JAVA_AGENT);
@@ -47,7 +46,7 @@ public class ClassLoadersTest {
 
     @Test
     @EnabledForJreRange(max = JRE.JAVA_15)
-    public void testURLClassLoaderHelperNotFailing() throws IOException {
+    void testURLClassLoaderHelperNotFailing() throws IOException {
         LibraryManagerMock libraryManager = new LibraryManagerMock();
 
         setProperty(ClassLoaderHelper.SYSTEM_PROPERTY_DISABLE_UNSAFE);
@@ -57,7 +56,7 @@ public class ClassLoadersTest {
 
     @Test
     @EnabledForJreRange(min = JRE.JAVA_16)
-    public void testURLClassLoaderHelperFailing() throws IOException {
+    void testURLClassLoaderHelperFailing() throws IOException {
         LibraryManagerMock libraryManager = new LibraryManagerMock();
 
         setProperty(ClassLoaderHelper.SYSTEM_PROPERTY_DISABLE_UNSAFE);
@@ -66,14 +65,14 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void testSystemClassLoaderHelper() throws IOException {
+    void testSystemClassLoaderHelper() throws IOException {
         LibraryManagerMock libraryManager = new LibraryManagerMock();
 
         new SystemClassLoaderHelper(ClassLoader.getSystemClassLoader(), libraryManager);
     }
 
     @Test
-    public void testSystemClassLoaderHelperNoUnsafe() throws IOException {
+    void testSystemClassLoaderHelperNoUnsafe() throws IOException {
         LibraryManagerMock libraryManager = new LibraryManagerMock();
 
         setProperty(ClassLoaderHelper.SYSTEM_PROPERTY_DISABLE_UNSAFE);
@@ -81,7 +80,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void testSystemClassLoaderHelperNoJavaAgent() throws IOException {
+    void testSystemClassLoaderHelperNoJavaAgent() throws IOException {
         LibraryManagerMock libraryManager = new LibraryManagerMock();
 
         setProperty(ClassLoaderHelper.SYSTEM_PROPERTY_DISABLE_JAVA_AGENT);
@@ -90,7 +89,7 @@ public class ClassLoadersTest {
 
     @Test
     @EnabledForJreRange(max = JRE.JAVA_8)
-    public void testSystemClassLoaderHelperNotFailing() throws IOException {
+    void testSystemClassLoaderHelperNotFailing() throws IOException {
         LibraryManagerMock libraryManager = new LibraryManagerMock();
 
         setProperty(ClassLoaderHelper.SYSTEM_PROPERTY_DISABLE_UNSAFE);
@@ -100,7 +99,7 @@ public class ClassLoadersTest {
 
     @Test
     @EnabledForJreRange(min = JRE.JAVA_9)
-    public void testSystemClassLoaderHelperFailing() throws IOException {
+    void testSystemClassLoaderHelperFailing() throws IOException {
         LibraryManagerMock libraryManager = new LibraryManagerMock();
 
         setProperty(ClassLoaderHelper.SYSTEM_PROPERTY_DISABLE_UNSAFE);

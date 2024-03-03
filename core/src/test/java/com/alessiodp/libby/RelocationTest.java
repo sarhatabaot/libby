@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static com.alessiodp.libby.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RelocationTest {
+class RelocationTest {
 
     private LibraryManagerMock libraryManager;
 
@@ -25,7 +25,7 @@ public class RelocationTest {
     }
 
     @Test
-    public void isolatedRelocatedLoad() throws Exception {
+    void isolatedRelocatedLoad() throws Exception {
         libraryManager.loadLibrary(APACHE_COMMONS_LANG3_ISOLATED_RELOCATED);
 
         assertNoneLoaded(libraryManager);

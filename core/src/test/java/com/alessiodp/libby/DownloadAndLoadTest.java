@@ -11,8 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static com.alessiodp.libby.TestUtils.*;
-
-public class DownloadAndLoadTest {
+ class DownloadAndLoadTest {
 
     private LibraryManagerMock libraryManager;
 
@@ -29,11 +28,11 @@ public class DownloadAndLoadTest {
     }
 
     @Test
-    public void downloadLibrary() {
+    void downloadLibrary() {
         Path downloadedFilePath = libraryManager.downloadLibrary(APACHE_COMMONS_LANG3);
         assertTrue(downloadedFilePath.toFile().isFile());
 
-        // Make sure downloaded file has the correct checksum
+        // Make sure the downloaded file has the correct checksum
         assertCorrectFile(downloadedFilePath, APACHE_COMMONS_LANG3.getChecksum());
 
         assertNoneLoaded(libraryManager);
@@ -41,7 +40,7 @@ public class DownloadAndLoadTest {
     }
 
     @Test
-    public void loadLibrary() {
+    void loadLibrary() {
         libraryManager.loadLibrary(APACHE_COMMONS_LANG3);
 
         assertNotLoadedInGlobal();
@@ -53,7 +52,7 @@ public class DownloadAndLoadTest {
     }
 
     @Test
-    public void isolatedLoad() throws Exception {
+    void isolatedLoad() throws Exception {
         libraryManager.loadLibrary(APACHE_COMMONS_LANG3_ISOLATED);
 
         assertNoneLoaded(libraryManager);
@@ -65,7 +64,7 @@ public class DownloadAndLoadTest {
     }
 
     @Test
-    public void globalIsolatedLoad() throws Exception {
+    void globalIsolatedLoad() throws Exception {
         libraryManager.loadLibrary(APACHE_COMMONS_LANG3_GLOBAL_ISOLATED);
 
         assertNoneLoaded(libraryManager);
